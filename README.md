@@ -1,2 +1,2 @@
 # Team9_CS534
-Creation and use of State of the Art AI algorithms for diagnosis of heart diseases
+Use of State of the Art AI algorithms for the diagnosis of heart diseases
