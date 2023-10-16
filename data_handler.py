@@ -32,5 +32,12 @@ class DataHandler:
         print('Missing values:')
         print(missing_values_per_column)
 
+        duplicated_values = self.data.duplicated().sum()
+        print('Duplicated :', duplicated_values)
+
+        skew = self.data.skew()
+        print('Skew')
+        print(skew)
+
         cardio_counts = self.data['cardio'].value_counts()
         print(cardio_counts)
