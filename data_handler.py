@@ -16,6 +16,7 @@ class DataHandler:
 
     def train_test_split(self, test_size=0.2, random_state=42):
         x = self.data.drop('cardio', axis=1)
+        # x = x.drop('id', axis=1)
         y = self.data['cardio']
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(x, y, test_size=test_size,
                                                                                 random_state=random_state)
