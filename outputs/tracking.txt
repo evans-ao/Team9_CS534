@@ -1,0 +1,8 @@
+True Positive Cases : 4910
+True Negative Cases : 5420
+False Positive Cases : 1568
+False Negative Cases : 2102
+The Precision is: 0.758
+The Recall is: 0.7
+The F1 Score is: 0.728
+The Model Accuracy is: 73.786 %

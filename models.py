@@ -2,9 +2,13 @@ import xgboost as xgb
 from sklearn.model_selection import cross_val_score
 from tqdm import tqdm
 from xgboost import XGBClassifier
+from xgboost import plot_importance
 from sklearn.metrics import confusion_matrix, accuracy_score
 import seaborn as sns
 import matplotlib.pyplot as plt
+from numpy import sort
+from sklearn.feature_selection import SelectFromModel
+import warnings
 
 
 class XGBoostModel:
@@ -31,7 +35,7 @@ class XGBoostModel:
         plt.xlabel('Predicted')
         plt.ylabel('Actual')
         plt.title("Output Confusion Matrix")
-        plt.show()
+        # plt.show()
 
         print('True Positive Cases : {}'.format(cm[1][1]))
         print('True Negative Cases : {}'.format(cm[0][0]))
@@ -45,8 +49,29 @@ class XGBoostModel:
         print("The Precision is:", round(pre, 3))
         print("The Recall is:", round(rec, 3))
         print("The F1 Score is:", round(f1_score, 3))
-
         print("The Model Accuracy is:", round(accuracy_score(self.y_test, predict) * 100, 3), "%")
+
+        # plot_importance(model)
+        # plt.show()
+        # id is the most important feature according to the plot. Removed id from the dataframe.
+
+        # Fit model using each importance as a threshold
+        thresholds = sort(model.feature_importances_)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            for thresh in thresholds:
+                # select features using threshold
+                selection = SelectFromModel(model, threshold=thresh, prefit=True)
+                select_X_train = selection.transform(self.x_train)
+                # train model
+                selection_model = XGBClassifier()
+                selection_model.fit(select_X_train, self.y_train)
+                # eval model
+                select_X_test = selection.transform(self.x_test)
+                y_pred = selection_model.predict(select_X_test)
+                predictions = [round(value) for value in y_pred]
+                accuracy = accuracy_score(self.y_test, predictions)
+                print("Thresh=%.3f, n=%d, Accuracy: %.2f%%" % (thresh, select_X_train.shape[1], accuracy * 100.0))
 
     def cross_validate(self, k=5):
         model = XGBClassifier()
