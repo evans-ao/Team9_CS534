@@ -48,3 +48,53 @@ methodology
     evaluating consul and re-arranging senate i9f consul is deemed incompetent
 4. Cycle and repeat until Roman consul can be elevated to dictator for life and republic can be stagnant
 """
+
+
+class RomanPolitician:
+    def __init__(self):
+        self.voting_power = 0
+        self.name = str()
+        self.num_mistakes = 0
+        self.num_correct = 0
+        self.cycles_in_power = 0
+
+
+class RomanRepublic:
+    def __init__(self, power_of_republic=100):
+        self.consul = None
+        self.dictator = None
+        self.senate_set = set()
+        self.republic_power = power_of_republic
+
+    # set up the roman republic system by declaring roles of each member
+    def declare_republic(self, initial_consul, initial_senate_set):
+        self.consul = initial_consul
+        self.senate_set = initial_senate_set
+
+    # iterate through the roman republic system given a number of cycles to train
+    def cycle_through_republic(self, num_training_cycles):
+        pass
+
+    # hyper-tune the senate and consul for better classification/voting
+    def hyper_tune_republic(self):
+        pass
+
+    # get the prediction of a given patient
+    def get_republic_choice(self):
+        pass
+
+    # run a single training session for all SOTA models consul & senate including
+    def new_republic_year(self):
+        pass
+
+    # re-arrange the voting power between each model in the senate
+    def senate_review(self):
+        pass
+
+    # evaluate if the consul is still qualified
+    def consul_review(self):
+        pass
+
+    # promote a consul to dictator and return current republic as with set in stone voting powers
+    def establish_dictator(self):
+        pass
