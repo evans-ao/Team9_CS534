@@ -13,7 +13,7 @@ import seaborn as sns
 
 def main():
 
-    filepath = 'D:/Chikku/Docs/VSCode/VSCode/Team9_CS534-main/data/cardio_train.csv'
+    filepath = 'data/cardio_train.csv'
     data = pd.read_csv(filepath, delimiter=';')
 
     diab_cols = ['ap_hi', 'ap_lo', 'cholesterol', 'gluc','smoke','active'] 
