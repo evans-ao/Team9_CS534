@@ -52,49 +52,100 @@ methodology
 
 class RomanPolitician:
     def __init__(self):
-        self.voting_power = 0
-        self.name = str()
-        self.num_mistakes = 0
-        self.num_correct = 0
+        self.alogirthim = None
         self.cycles_in_power = 0
+        self.voting_power = 0
+        self. max_power = 0
+        self.name = str()
+
+        # number of false positives and negatives
+        self.num_mistakes = 0
+        # number of True positives and negatives
+        self.num_correct = 0
+
+
+    def performance_score(self):
+        return self.num_correct/(self.num_mistakes + self.num_correct)
+
+    def new_reupublic(self):
+        self.voting_power = 0
+        # number of false positives and negatives
+        self.num_mistakes = 0
+        # number of True positives and negatives
+        self.num_correct = 0
+
 
 
 class RomanRepublic:
     def __init__(self, power_of_republic=100):
         self.consul = None
-        self.dictator = None
         self.senate_set = set()
-        self.republic_power = power_of_republic
+        self.republic_power = power_of_republic / 2
+        self.politican_set = set()
 
     # set up the roman republic system by declaring roles of each member
     def declare_republic(self, initial_consul, initial_senate_set):
-        self.consul = initial_consul
-        self.senate_set = initial_senate_set
+        self.declare_consul(initial_consul)
+
+        self.senate_set.clear()
+        for senate_politician in initial_senate_set:
+            self.declare_consul(senate_politician)
+
+        self.politican_set = self.senate_set
+        self.politican_set.add(self.consul)
+
+    def declare_consul(self, roman_member: RomanPolitician):
+        roman_member.voting_power = self.republic_power
+        roman_member.max_power = self.republic_power
+
+        roman_member.new_reupublic()
+        self.consul = roman_member
+
+    def declare_senate(self, roman_member: RomanPolitician):
+        roman_member.voting_power = self.republic_power / 3
+        roman_member.max_power = self.republic_power
+
+        roman_member.new_reupublic()
+        self.senate_set.add(roman_member)
 
     # iterate through the roman republic system given a number of cycles to train
     def cycle_through_republic(self, num_training_cycles):
-        pass
+        for index in range(num_training_cycles):
+            self.new_republic_year()
 
-    # hyper-tune the senate and consul for better classification/voting
-    def hyper_tune_republic(self):
-        pass
 
-    # get the prediction of a given patient
-    def get_republic_choice(self):
-        pass
-
-    # run a single training session for all SOTA models consul & senate including
     def new_republic_year(self):
-        pass
+        has_new_Consul = self.is_consul_discharged()
+
+        if has_new_Consul:
+            new_Consul = self.get_best_senator()
+            self.senate_set.remove(new_Consul)
+            self.senate_set.add(self.consul)
+
+            self.declare_republic(new_Consul, self.senate_set)
+        else:
+            self.senate_review()
+
+    def get_best_senator(self):
+        best_senator = None
+
+        for sentor in self.senate_set:
+            if best_senator is None:
+                best_senator = sentor
+
+            if sentor.voting_power > best_senator.voting_power:
+                best_senator = sentor
+
+        return best_senator
+
 
     # re-arrange the voting power between each model in the senate
     def senate_review(self):
         pass
 
     # evaluate if the consul is still qualified
-    def consul_review(self):
-        pass
+    def is_consul_discharged(self):
+        for senator in self.senate_set:
+            return ((senator.performance_score > self.consul.performance_score)
+                    and (senator is self.get_best_senator()))
 
-    # promote a consul to dictator and return current republic as with set in stone voting powers
-    def establish_dictator(self):
-        pass
