@@ -15,7 +15,8 @@ class DataHandler:
         return pd.read_csv(filepath, delimiter=';')
 
     def train_test_split(self, test_size=0.2, random_state=42):
-        x = self.data.drop('cardio', axis=1)
+        # x = self.data.drop('cardio', axis=1)
+        x = self.data.drop(columns=['cardio', 'id'])
         y = self.data['cardio']
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(x, y, test_size=test_size,
                                                                                 random_state=random_state)
@@ -31,6 +32,13 @@ class DataHandler:
         missing_values_per_column = self.data.isnull().sum()
         print('Missing values:')
         print(missing_values_per_column)
+
+        duplicated_values = self.data.duplicated().sum()
+        print('Duplicated :', duplicated_values)
+
+        skew = self.data.skew()
+        print('Skew')
+        print(skew)
 
         cardio_counts = self.data['cardio'].value_counts()
         print(cardio_counts)
